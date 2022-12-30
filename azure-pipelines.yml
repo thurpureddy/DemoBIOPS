@@ -1,0 +1,26 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: CopyFiles@2
+  displayName: 'Copy Files to: Staging artifact'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    OverWrite: true
+
+- task: CopyPublishBuildArtifacts@1
+  displayName: 'Copy Publish Artifact: BIOPS'
+  inputs:
+    CopyRoot: '$(Build.ArtifactStagingDirectory)'
+    Contents: '*.pbix*'
+    ArtifactName: BIOPS
+    ArtifactType: Container
